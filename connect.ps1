@@ -1,6 +1,6 @@
 $ErrorActionPreference = "Stop"
 
-$RaspiHost = "100.119.164.32"
+$RaspiHost = $env:MIRASPI_HOST
 $RaspiUser = "pi"
 $RaspiCommand = "raspi"
 
@@ -16,6 +16,15 @@ Write-Host ""
 Write-Host "Raspi Connect" -ForegroundColor Green
 Write-Host "Conecta esta consola a miraspi via Tailscale + SSH." -ForegroundColor DarkGray
 Write-Host ""
+
+if ([string]::IsNullOrWhiteSpace($RaspiHost)) {
+    $RaspiHost = Read-Host "IP o hostname Tailscale de tu Raspberry"
+}
+
+if ([string]::IsNullOrWhiteSpace($RaspiHost)) {
+    Write-Host "No se indico host Tailscale. Cancelado." -ForegroundColor Red
+    exit 1
+}
 
 if (-not (Has-Command ssh)) {
     Write-Host "No encontre ssh en esta computadora." -ForegroundColor Red
